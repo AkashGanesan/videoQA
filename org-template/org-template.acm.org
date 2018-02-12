@@ -1,0 +1,93 @@
+#+TITLE: 598 project
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:{} arch:headline 
+#+OPTIONS: author:nil c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t
+#+CREATOR: Emacs 25.2.2 (Org mode 8.2.10)
+
+#+DESCRIPTION:
+#+EXCLUDE_TAGS: noexport
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+LATEX_CLASS: acmart
++LATEX_HEADER: \usepackage[T1]{fontenc}
+#+LATEX_HEADER: \usepackage{lmodern}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+#+LATEX_HEADER: \author{Akash Ganesan}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \email{akaberto@umich.edu}
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \author{Divyansh Pal}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \email{email@umich.edu}
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \author{Karthik Muthuraman}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \email{mkarthik@umich.edu}
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \author{Shubham Dash}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \email{shudbhamd@umich.edu}
+#+LATEX_HEADER:  
+
+#+LATEX_HEADER: \begin{CCSXML}
+#+LATEX_HEADER: <ccs2012>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010179.10010182</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Natural language generation</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010224.10010225.10010227</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Scene understanding</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010224.10010245.10010250</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Object detection</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: </ccs2012>
+#+LATEX_HEADER: <ccs2012>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010224.10010225.10010231</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Visual content-based indexing and retrieval</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: </ccs2012>
+#+LATEX_HEADER: \end{CCSXML}
+
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Object detection}
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Natural language generation}
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Scene understanding}
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Visual content-based indexing and retrieval}   
+
+
+
+
+#+LATEX_HEADER: \settopmatter{printacmref=false} % Removes citation information below abstract
+#+LATEX_HEADER: \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+#+LATEX_HEADER: \pagestyle{plain} % removes running headers
+#+LATEX_HEADER:  
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \renewcommand\@formatdoi[1]{\ignorespaces}
+#+LATEX_HEADER: \makeatother
+
+
+
+
+
+
+
+bibliographystyle:ACM-Reference-Format
+bibliography:manuscript.bib
