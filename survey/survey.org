@@ -1,0 +1,203 @@
+#+TITLE: Video Based Contextual Question Answering 
+#+OPTIONS: ':nil *:t -:t ::t <:t H:3 \n:nil ^:{} arch:headline 
+#+OPTIONS: author:nil c:nil creator:comment d:(not "LOGBOOK") date:t
+#+OPTIONS: e:t email:nil f:t inline:t num:t p:nil pri:nil stat:t
+#+OPTIONS: tags:t tasks:t tex:t timestamp:t toc:nil todo:t |:t
+#+CREATOR: Emacs 25.2.2 (Org mode 8.2.10)
+#+DESCRIPTION:
+#+EXCLUDE_TAGS: noexport
+#+KEYWORDS:
+#+LANGUAGE: en
+#+SELECT_TAGS: export
+#+LATEX_CLASS: acmart
+#+LATEX_HEADER: \usepackage[T1]{fontenc}
+#+LATEX_HEADER: \usepackage{lmodern}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+#+LATEX_HEADER: \author{Akash Ganesan}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \email{akaberto@umich.edu}
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \author{Divyansh Pal}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \email{divpal@umich.edu}
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \author{Karthik Muthuraman}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \email{mkarthik@umich.edu}
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \author{Shubham Dash}
+#+LATEX_HEADER: \affiliation{%
+#+LATEX_HEADER: }
+#+LATEX_HEADER: \email{shudbhamd@umich.edu}
+#+LATEX_HEADER:  
+
+#+LATEX_HEADER: \begin{CCSXML}
+#+LATEX_HEADER: <ccs2012>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010179.10010182</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Natural language generation</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010224.10010225.10010227</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Scene understanding</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010224.10010245.10010250</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Object detection</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: </ccs2012>
+#+LATEX_HEADER: <ccs2012>
+#+LATEX_HEADER: <concept>
+#+LATEX_HEADER: <concept_id>10010147.10010178.10010224.10010225.10010231</concept_id>
+#+LATEX_HEADER: <concept_desc>Computing methodologies~Visual content-based indexing and retrieval</concept_desc>
+#+LATEX_HEADER: <concept_significance>500</concept_significance>
+#+LATEX_HEADER: </concept>
+#+LATEX_HEADER: </ccs2012>
+#+LATEX_HEADER: \end{CCSXML}
+
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Object detection}
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Natural language generation}
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Scene understanding}
+#+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Visual content-based indexing and retrieval}   
+
+#+LATEX_HEADER: \settopmatter{printacmref=false} % Removes citation information below abstract
+#+LATEX_HEADER: \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+#+LATEX_HEADER: \pagestyle{plain} % removes running headers
+#+LATEX_HEADER:  
+#+LATEX_HEADER:  
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \renewcommand\@formatdoi[1]{\ignorespaces}
+#+LATEX_HEADER: \makeatother
+
+
+
+
+
+* Problem Definition
+
+  The problem we are primarily looking to solve aims at building a
+  contextual Question-Answering model for a given video. The current
+  methodologies currently provides a robust model to handle
+  Question-Answering in images, but we are trying to generalize this
+  approach to be applied on videos. Adding on it the question-answering
+  model, what we are trying to build should also be able to handle
+  contextual queries or questions, for example if a frame has an image
+  of a man and a cat sitting, the model should be able to handle queries
+  like “where was the cat sitting with respect to the man” or “what is
+  the man holding in his right hand”, questions which deal with the
+  context of that particular frame in consideration.  
+
+  The questions being asked will focus primarily on binary yes/no
+  question answering as well as the questions which ask the “What”,
+  “Why”, “How”, “When” and “Where”.
+
+
+
+* Challenges
+
+  There are multiple challenges which we have to deal with in order to
+  successfully build a model which can efficiently handle queries and
+  answer those with respect to the video in consideration and also
+  preserve the context embedded in the video.  First challenge would
+  be to build a contextual linking in between the scene
+  graphs. Consider an example where a man is eating food in one frame
+  which is considered as a key frame and in the second frame he is
+  driving a car, so the link from one scene graph describing one frame
+  and the second scene graph describing the other frame should be
+  linked in such a way so that the graph when traversed for finding
+  out the answers should be representative of how to video is evolving
+  through time.  Secondly, for gauging the efficiency of our proposed
+  model we need to fix upon an evaluation metric which can provide a
+  measure for calculating the efficiency of our model.  One more
+  interesting challenge which needs to be tackled for building a model
+  which handles contextual question-answering on videos in general, we
+  need to look at how scalable the model would be, for example how
+  efficient would answer retrieval be if the video is a very long.
+  Finally, since this is a novel idea and this idea is not being
+  worked, finding references to the
+
+* Prior Work
+
+  Previous related work can be found in the related fields of video
+  summarization, image captioning and scene graph generation. There are
+  papers we refer to, that propose methods to generate key-frames of
+  interest from a long video. A major part of our project will draw from
+  works relating to dense captioning of images and generating scene
+  graphs. There is a wide body of recent literature which propose novel
+  and optimized techniques for the aforementioned tasks. Most of these
+  rely on Deep Learning methods for object detection and captioning and
+  ML and optimization techniques to generate the scene graphs. Finally,
+  in terms of evaluation processes, possible test datasets and possible
+  metrics, there is a wide range of papers and open datasets that can be
+  relevant to our project.
+
+
+
+* Proposed Methodology
+
+  In our methodology, we first use the video data and find key frames.
+  For each keyframe, we do semantic segmentation to get different
+  localized objects, which will serve as our nodes during graph
+  generation. YOLO and Faster R-CNN are usually used for semantic
+  segmentation for their speed and accuracy. For our scope we are
+  considering a dataset that gives us semantic segmentation results on
+  the frames of the video.  We then use a dense captioning algorithm
+  to generate captions for each frame based on the dense captioning
+  algorithm cite:k2.  Now, we can use generated captions to form a
+  scene graph. These scene graphs from captions are generated using
+  the algorithm mentioned in cite:s2. The next step is to link the
+  scene graphs. This novel step will establish a relation between the
+  existing scene graph and the incoming scene graph from the current
+  frame. This will tell what has changed from one frame to the next
+  and this relationship is important.  We plan to do this by
+  augmenting our generated scene graph with the difference of the new
+  and the current scene graph.  
+
+  We may ask questions on the image like, “When did the person get in
+  the car”?, from two adjacent frames that has a person outside the
+  car and one has the person inside it.  So, the relationship between
+  the frame needs to be captured.  Individual questions like where is
+  an object in a frame may be answered by scene analysis from
+  questions.  However, it is a challenge to ask for relationship
+  between the frames that we plan to address.
+  
+  #+CAPTION: Proposed Pipeline
+  [[./images/proposal-pipeline.png]]
+  
+
+* Dataset Details
+  We have the Visual Genome and the Youtube-8M databases.  The visual
+  genome dataset has 108k images with their scene graphs.  The
+  Youtube-8M has annotations for videos.  These will be the set that we
+  work with.
+
+* Evaluation Criteria
+  To evaluate the results, we will use Amazon’s mechanical Turk to
+  check how well an answer matches a question in relation to a scene
+  graph.  We can also use an alternative algorithms to create a scene
+  graph and match the scene graphs as an initial check
+
+* Future Work
+  Our work can be extended to incorporate speech content of video to
+  generate more node edge combinations. This multimodal approach will
+  make a denser graph but will store much more contextually rich
+  information and can be used to answer a much more in depth answers.
+  Once the graph is generated, a description text of the video can be
+  generated. Taking a step forward, we can use the generated graph to
+  produce videos.
+
+  
+
+* References
+  bibliographystyle:ACM-Reference-Format
+  bibliography:manuscript.bib
