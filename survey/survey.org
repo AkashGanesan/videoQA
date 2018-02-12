@@ -176,16 +176,26 @@
   
 
 * Dataset Details
-  We have the Visual Genome and the Youtube-8M databases.  The visual
-  genome dataset has 108k images with their scene graphs.  The
-  Youtube-8M has annotations for videos.  These will be the set that we
-  work with.
+  The datasets which are considered for running our experiments are
+  the Visual Genome and the Youtube-8M databases.  The visual genome
+  dataset has 108,077 images which has 75,729 unique objects, 40,480
+  unique objects and the number of unique relationships between those
+  object, which form the nodes for the respective scene graphs as
+  40,513.
+
+  The second dataset which we will consider for testing our contextual
+  question-answering model on videos is the Youtube-8M dataset. The
+  dataset contains frame-by-frame annotations for eight million videos
+  present.
 
 * Evaluation Criteria
   To evaluate the results, we will use Amazon’s mechanical Turk to
-  check how well an answer matches a question in relation to a scene
-  graph.  We can also use an alternative algorithms to create a scene
-  graph and match the scene graphs as an initial check
+  generate answers to questions, answered by humans. This provides a
+  baseline to check the accuracy of the generated answers from our
+  question-answering model. There are several methods existing for
+  evaluating the performance of image based question-answering models
+  such as WUPS, which have been applied to video-based query answering
+  models.
 
 * Future Work
   Our work can be extended to incorporate speech content of video to
