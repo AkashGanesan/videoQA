@@ -10,6 +10,7 @@
 #+LANGUAGE: en
 #+SELECT_TAGS: export
 #+LATEX_CLASS: acmart
+#+LATEX_HEADER: \usepackage{cuted}
 #+LATEX_HEADER: \usepackage[T1]{fontenc}
 #+LATEX_HEADER: \usepackage{lmodern}
 #+LATEX_HEADER: \usepackage{graphicx}
@@ -37,6 +38,12 @@
 #+LATEX_HEADER: }
 #+LATEX_HEADER: \email{shudbhamd@umich.edu}
 #+LATEX_HEADER:  
+
+#+LATEX_HEADER: \settopmatter{printacmref=false} % Removes citation information below abstract
+#+LATEX_HEADER: \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+#+LATEX_HEADER: \pagestyle{plain} % removes running headers
+#+LATEX_HEADER:  
+
 
 #+LATEX_HEADER: \begin{CCSXML}
 #+LATEX_HEADER: <ccs2012>
@@ -69,18 +76,7 @@
 #+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Natural language generation}
 #+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Scene understanding}
 #+LATEX_HEADER: \ccsdesc[500]{Computing methodologies~Visual content-based indexing and retrieval}   
-
-#+LATEX_HEADER: \settopmatter{printacmref=false} % Removes citation information below abstract
-#+LATEX_HEADER: \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
-#+LATEX_HEADER: \pagestyle{plain} % removes running headers
-#+LATEX_HEADER:  
-#+LATEX_HEADER:  
-#+LATEX_HEADER: \makeatletter
-#+LATEX_HEADER: \renewcommand\@formatdoi[1]{\ignorespaces}
-#+LATEX_HEADER: \makeatother
-
-
-
+#+LATEX_HEADER: 
 
 
 * Problem Definition
@@ -123,23 +119,22 @@
   which handles contextual question-answering on videos in general, we
   need to look at how scalable the model would be, for example how
   efficient would answer retrieval be if the video is a very long.
-  Finally, since this is a novel idea and this idea is not being
-  worked, finding references to the
 
 * Prior Work
 
   Previous related work can be found in the related fields of video
-  summarization, image captioning and scene graph generation. There are
-  papers we refer to, that propose methods to generate key-frames of
-  interest from a long video. A major part of our project will draw from
-  works relating to dense captioning of images and generating scene
-  graphs. There is a wide body of recent literature which propose novel
-  and optimized techniques for the aforementioned tasks. Most of these
-  rely on Deep Learning methods for object detection and captioning and
-  ML and optimization techniques to generate the scene graphs. Finally,
-  in terms of evaluation processes, possible test datasets and possible
-  metrics, there is a wide range of papers and open datasets that can be
-  relevant to our project.
+  summarization cite:DBLP:journals/corr/ZhangCSG16a, image captioning
+  cite:k2,d1 and scene graph generation cite:k1,s2. We reviewed papers
+  that propose methods to generate key-frames of interest from a long
+  video. A major part of our project will draw from works relating to
+  dense captioning of images and generating scene graphs. There is a
+  wide body of recent literature which propose novel and optimized
+  techniques for the aforementioned tasks. Most of these rely on Deep
+  Learning methods for object detection and captioning and ML and
+  optimization techniques to generate the scene graphs. Finally, in
+  terms of evaluation processes, possible test datasets and possible
+  metrics, there is a wide range of papers and open datasets that can
+  be relevant to our project cite:DBLP:conf/cvpr/NohSH16.
 
 
 
@@ -170,10 +165,16 @@
   an object in a frame may be answered by scene analysis from
   questions.  However, it is a challenge to ask for relationship
   between the frames that we plan to address.
+
   
-  #+CAPTION: Proposed Pipeline
-  [[./images/proposal-pipeline.png]]
-  
+  \clearpage
+  #+BEGIN_LATEX
+  \begin{strip}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/proposal-pipeline.png}
+  \captionof{figure}{Model pipeline}
+  \end{strip}  
+  #+END_LATEX
 
 * Dataset Details
   The datasets which are considered for running our experiments are
@@ -198,16 +199,23 @@
   models.
 
 * Future Work
+
   Our work can be extended to incorporate speech content of video to
   generate more node edge combinations. This multimodal approach will
   make a denser graph but will store much more contextually rich
-  information and can be used to answer a much more in depth answers.
+  information and can be used to answer much more in-depth questions.
   Once the graph is generated, a description text of the video can be
-  generated. Taking a step forward, we can use the generated graph to
-  produce videos.
-
+  generated.  Other attributes of the object can be detected and
+  incorporated to answer questions about emotion, expression, logic
+  etc. Currently we focus mainly on actions and relationships but our
+  work can be extended to emotion and inference based questions.
+  Lastly, current video retrieval techniques rely heavily on video
+  metadata such as video title/tags/description etc and less on the
+  actual content/frames of the video. Extending our work, a video
+  retrieval system can search on our representation of videos and
+  hence the actual video content.
   
 
-* References
+
   bibliographystyle:ACM-Reference-Format
   bibliography:manuscript.bib
