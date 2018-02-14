@@ -36,7 +36,7 @@
 #+LATEX_HEADER: \author{Shubham Dash}
 #+LATEX_HEADER: \affiliation{%
 #+LATEX_HEADER: }
-#+LATEX_HEADER: \email{shudbhamd@umich.edu}
+#+LATEX_HEADER: \email{shubhamd@umich.edu}
 #+LATEX_HEADER:  
 
 #+LATEX_HEADER: \settopmatter{printacmref=false} % Removes citation information below abstract
@@ -82,43 +82,36 @@
 * Problem Definition
 
   The problem we are primarily looking to solve aims at building a
-  contextual Question-Answering model for a given video. The current
-  methodologies currently provides a robust model to handle
-  Question-Answering in images, but we are trying to generalize this
-  approach to be applied on videos. Adding on it the question-answering
-  model, what we are trying to build should also be able to handle
-  contextual queries or questions, for example if a frame has an image
-  of a man and a cat sitting, the model should be able to handle queries
-  like “where was the cat sitting with respect to the man” or “what is
-  the man holding in his right hand”, questions which deal with the
-  context of that particular frame in consideration.  
+  contextual Question-Answering model for videos. The current
+  methodologies provide a robust model for image-based
+  Question-Answering, but we are trying to generalize this approach to
+  be videos.  The model should also be able to handle contextual
+  queries across the whole video.  For example, if a frame has an
+  image of a man and a cat sitting, it should be able to handle
+  queries like, “where was the cat sitting with respect to the man?”
+  or ,“what is the man holding in his hand?”.  It should be able to
+  answer queries relating to temporal relationships.
 
-  The questions being asked will focus primarily on binary yes/no
-  question answering as well as the questions which ask the “What”,
-  “Why”, “How”, “When” and “Where”.
-
+  Initially, we shall focus on handling only yes/no questions and then
+  extend to complex questions like “What?”, “How?”, “When?” and
+  “Where?”.
 
 
 * Challenges
 
   There are multiple challenges which we have to deal with in order to
   successfully build a model which can efficiently handle queries and
-  answer those with respect to the video in consideration and also
-  preserve the context embedded in the video.  First challenge would
-  be to build a contextual linking in between the scene
-  graphs. Consider an example where a man is eating food in one frame
-  which is considered as a key frame and in the second frame he is
-  driving a car, so the link from one scene graph describing one frame
-  and the second scene graph describing the other frame should be
-  linked in such a way so that the graph when traversed for finding
-  out the answers should be representative of how to video is evolving
-  through time.  Secondly, for gauging the efficiency of our proposed
-  model we need to fix upon an evaluation metric which can provide a
-  measure for calculating the efficiency of our model.  One more
-  interesting challenge which needs to be tackled for building a model
-  which handles contextual question-answering on videos in general, we
-  need to look at how scalable the model would be, for example how
-  efficient would answer retrieval be if the video is a very long.
+  answer them and also preserve the context embedded in the video.
+  First challenge would be to build a contextual linking in between
+  the scene graphs. Consider an example where a man is eating food in
+  one frame which is considered as a key frame and in the second frame
+  he is driving a car.  So, the link from one scene graph and the
+  second scene graph should be linked in such a way so that the graph
+  when traversed for finding out the answers should be representative
+  of how to video is evolving over time.  Secondly, for gauging the
+  efficiency of our proposed model, we need an evaluation metric.  One
+  more interesting challenge is scalability.  Here, we use time taken
+  to process the video and answer queries as the the metric.  
 
 * Prior Work
 
@@ -130,51 +123,53 @@
   dense captioning of images and generating scene graphs. There is a
   wide body of recent literature which propose novel and optimized
   techniques for the aforementioned tasks. Most of these rely on Deep
-  Learning methods for object detection and captioning and ML and
-  optimization techniques to generate the scene graphs. Finally, in
-  terms of evaluation processes, possible test datasets and possible
-  metrics, there is a wide range of papers and open datasets that can
-  be relevant to our project cite:DBLP:conf/cvpr/NohSH16.
-
-
+  Learning methods for object detection and captioning and Machine
+  Learning(ML) and optimization techniques to generate the scene
+  graphs. Finally, in terms of evaluation processes, possible test
+  datasets and possible metrics, there are papers and open datasets
+  that are relevant to our project cite:DBLP:conf/cvpr/NohSH16.
 
 * Proposed Methodology
 
-  In our methodology, we first use the video data and find key frames.
-  For each keyframe, we do semantic segmentation to get different
-  localized objects, which will serve as our nodes during graph
-  generation. YOLO and Faster R-CNN are usually used for semantic
-  segmentation for their speed and accuracy. For our scope we are
-  considering a dataset that gives us semantic segmentation results on
-  the frames of the video.  We then use a dense captioning algorithm
-  to generate captions for each frame based on the dense captioning
-  algorithm cite:k2.  Now, we can use generated captions to form a
-  scene graph. These scene graphs from captions are generated using
-  the algorithm mentioned in cite:s2. The next step is to link the
-  scene graphs. This novel step will establish a relation between the
-  existing scene graph and the incoming scene graph from the current
-  frame. This will tell what has changed from one frame to the next
-  and this relationship is important.  We plan to do this by
-  augmenting our generated scene graph with the difference of the new
-  and the current scene graph.  
+  We may ask questions like, “When did the person get in the car”?,
+  from two adjacent frames that has a person outside the car and one
+  has the person inside it.  So, the relationship between the frames
+  needs to be captured.  Individual questions like where an object is
+  in a frame may be answered by scene analysis.  However, it is a
+  challenge to ask for relationships between the frames that we plan
+  to address.
 
-  We may ask questions on the image like, “When did the person get in
-  the car”?, from two adjacent frames that has a person outside the
-  car and one has the person inside it.  So, the relationship between
-  the frame needs to be captured.  Individual questions like where is
-  an object in a frame may be answered by scene analysis from
-  questions.  However, it is a challenge to ask for relationship
-  between the frames that we plan to address.
+  In our methodology, we input the video data and identify key frames.
+  For each key frame, we do semantic segmentation to get different
+  localized objects, which will serve as nodes for the scene
+  graph. YOLO and Faster R-CNN are usually used for semantic
+  segmentation for their speed and accuracy.  We then use a dense
+  captioning algorithm to generate captions for each frame based on
+  cite:k2.  Now, we can use generated captions to form a scene
+  graph. These scene graphs from captions are generated using the
+  algorithm mentioned in cite:s2.  Each node in the scene graph
+  corresponds to an object in the current frame and each directed edge
+  represents the relationship between the objects.  The next step is
+  to link the scene graphs. This step will establish a relation
+  between the existing graph and the incoming scene graph from the
+  current frame.  We scan the existing graph to append any new nodes
+  (objects, attributes) and/or edges (relationships) that come up in
+  the new frame.  To answer temporal queries, we add timestamp as an
+  edge attribute.  We propose to employ graph alignment techniques and
+  explore possible graph similarity measures for detecting scene
+  changes.  We may use this to trigger new graph generation between
+  distinct scenes.  
+
+  #+CAPTION: Example scene graph cite:s1
+  [[./images/scene_graph.png]]
 
   
-  \clearpage
-  #+BEGIN_LATEX
-  \begin{strip}
-  \centering
-  \includegraphics[width=0.8\textwidth]{images/proposal-pipeline.png}
-  \captionof{figure}{Model pipeline}
-  \end{strip}  
-  #+END_LATEX
+  #+CAPTION: Model pipeline 
+  [[./images/proposal-pipeline.png]]
+
+
+
+
 
 * Dataset Details
   The datasets which are considered for running our experiments are
@@ -182,21 +177,28 @@
   dataset has 108,077 images which has 75,729 unique objects, 40,480
   unique objects and the number of unique relationships between those
   object, which form the nodes for the respective scene graphs as
-  40,513.
+  40,513.  
 
   The second dataset which we will consider for testing our contextual
   question-answering model on videos is the Youtube-8M dataset. The
   dataset contains frame-by-frame annotations for eight million videos
   present.
 
+  We consider these datasets for evaluation of our captioning and
+  scene graph generation algorithms.
+
 * Evaluation Criteria
-  To evaluate the results, we will use Amazon’s mechanical Turk to
-  generate answers to questions, answered by humans. This provides a
-  baseline to check the accuracy of the generated answers from our
-  question-answering model. There are several methods existing for
+  To evaluate the results, we will primarily rely on human evaluations
+  as the baseline.  This can be accomplished using Amazon’s mechanical
+  Turk or in-class surveys. This provides a baseline to check the
+  accuracy of the generated answers from our question-answering
+  model. Once we have this, we have several methods existing for
   evaluating the performance of image based question-answering models
-  such as WUPS, which have been applied to video-based query answering
-  models.
+  such as Wu-Palmer Similarity(WUPS) cite:DBLP:conf/cvpr/NohSH16.
+  WUPS is a similarity measure between words trained on WordNet. On
+  thresholding it, we get different performances.
+
+
 
 * Future Work
 
