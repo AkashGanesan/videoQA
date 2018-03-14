@@ -34,10 +34,17 @@ public class TestSceneGraph {
         Scanner input = new Scanner(System.in);
         RuleBasedParser parser = new RuleBasedParser();
 	    SceneGraph sg = parser.parse("");
-        while (input.hasNextLine()) {
+
+	    System.out.println("\n#start\n");
+        System.out.flush();
+	    
+	    
+	    while (input.hasNextLine()) {
         	sg = parser.parse(input.nextLine());
         	System.out.println(sg.toJSON(0, "0", ""));        	
-        }
+        	System.out.flush();
+
+	    }
         
 	    
 
