@@ -6,10 +6,13 @@ import json
 
 
 
-
 class SceneGraph(object):
 
-    def __init__(self, scene_graph_exe, fw_file_name="tmpout", fr_file_name="tmpout", start_str="#start"):
+    def __init__(self,
+                 scene_graph_exe,
+                 fw_file_name="tmpout",
+                 fr_file_name="tmpout",
+                 start_str="#start"):        
         self.init = 0
         self.start_str = start_str
         self.fw = open(fw_file_name, "wb")
@@ -24,8 +27,10 @@ class SceneGraph(object):
                 self.fr.readline()
                 break
             sleep(1)
+
+
         self.init = 1
-        print "Ready"
+        print "Scene Graph initialization is done."
     
     def getVal(self, sentence):
         if (self.init == 0):
@@ -39,3 +44,4 @@ class SceneGraph(object):
             else:
                 return  val
         
+
