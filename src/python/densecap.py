@@ -17,8 +17,7 @@ class DenseCapFetcher():
             },
             headers={'api-key': self.api_key})
 
-        json_fname = "test.json"
         dump_dict = r.json()
 
-        self.caps = edict(dump_dict)
+        return edict(dump_dict)
 
