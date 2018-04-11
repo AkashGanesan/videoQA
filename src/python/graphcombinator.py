@@ -124,6 +124,19 @@ def dotify(g, path):
 
     nx.nx_pydot.write_dot(g, path)
 
+def graph_sim_frob(g1,g2):
+
+    nodes_a = set(g1.nodes)
+    nodes_b = set(g2.nodes)
+    nodes_combined = nodes_a.union(nodes_b)
+    nodes_combined = sorted(list(nodes_combined))
+    adj1 = nx.to_numpy_matrix(g1, nodelist = nodes_combined)
+    adj2 = nx.to_numpy_matrix(g2, nodelist = nodes_combined)
+
+    return 1- ((np.linalg.norm(adj1-adj2)**2)/(len(g1.edges)+len(g2.edges)))
+
+
+
 
 
 if __name__=="__main__":
@@ -149,5 +162,4 @@ if __name__=="__main__":
     
     
     dotify(nx.compose_all([xG,yG, zG,kG]), "merged.dot")
-
 
