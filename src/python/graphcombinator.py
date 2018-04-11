@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 from easydict import EasyDict as edict
 import json
 from functools import reduce
+import glob
+import os
+import sys
+
 object_attr = {
     "type" : "object",
     "fillcolor" : "red",
@@ -19,31 +23,73 @@ attribute_attr = {
     "style" : "filled"}
 
 
-def apply_on_sgs(func, json_in_folder):
+
+def get_agg_from_json(json_in_folder):
+
     agg = []
-    # print("Length", len(sorted(glob.glob(os.path.join(json_in_folder, "*.json")))))
+    print("Length", len(sorted(glob.glob(os.path.join(json_in_folder, "*.json")))))
     for i in sorted(glob.glob(os.path.join(json_in_folder, "*.json"))):
         with open(i) as f:
-            try :
+            try :                
+                x = edict(json.loads(f.read()))            
+                agg = agg + [x.results[0].sg]
+            except:
+                print ("Fired exception")
+                agg = agg + [None]
+                pass
+            
+    return list(agg)
+        
+    
+def apply_on_sgs(func, json_in_folder):
+    agg = []
+    print("Length", len(sorted(glob.glob(os.path.join(json_in_folder, "*.json")))))
+    for i in sorted(glob.glob(os.path.join(json_in_folder, "*.json"))):
+        with open(i) as f:
+            try :                
                 x = edict(json.loads(f.read()))            
                 agg = agg + (x.results[0].sg)
             except:
+                print ("Fired exception")
                 agg = agg + None
+                pass
             
     return func(list(agg))
     
 
 def get_aggregate_graph(json_in_folder):
     return apply_on_sgs(sg_list_to_combined_graph, json_in_folder)
-        
+
+
+def sg_list_to_dg_list(sg_frame):
+    return list(map(sg_to_dg, sg_frame))
+
+def sgs_list_to_dgs_list(sgs_frames):
+    return list(map(sg_list_to_dg_list, sgs_frames))
+
+def combine_scene_graphs_list(json_in_folder):
+    x = get_agg_from_json(json_in_folder)    
+    return list(map(nx.compose_all,sgs_list_to_dgs_list(x)))
+
+
+
+
+
+def get_graph_objs(json_in_folder):
+    return  apply_on_sgs(sg_list_to_frame_graphs, json_in_folder)
+
+def sg_list_to_frame_graphs(sg_list):
+    dg_list = sg_list_to_dg_list(sg_list)
+    print ("DGList, ",list(dg_list)[0])
+    return nx.compose_all(dg_list)
+
                 
 
 def sg_list_to_combined_graph(sg_list):
     dg_list = sg_list_to_dg_list(sg_list)
     return nx.compose_all(dg_list)
 
-def sg_list_to_dg_list(sg_list):
-    return map(sg_to_dg, sg_list)
+
 
 def sg_to_dg(sg):
     dg = nx.DiGraph()
