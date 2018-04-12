@@ -8,17 +8,17 @@ import os
 import sys
 
 object_attr = {
-    "type" : "object",
+    "t" : "object",
     "fillcolor" : "red",
     "style" : "filled"}
 
 predicate_attr = {
-    "type" : "predicate",
+    "t" : "predicate",
     "fillcolor" : "yellow",
     "style" : "filled"}
 
 attribute_attr = {
-    "type" : "attribute",
+    "t" : "attribute",
     "fillcolor" : "green",
     "style" : "filled"}
 
@@ -72,11 +72,6 @@ def combine_scene_graphs_list(json_in_folder):
     return list(map(nx.compose_all,sgs_list_to_dgs_list(x)))
 
 
-
-
-
-def get_graph_objs(json_in_folder):
-    return  apply_on_sgs(sg_list_to_frame_graphs, json_in_folder)
 
 def sg_list_to_frame_graphs(sg_list):
     dg_list = sg_list_to_dg_list(sg_list)
