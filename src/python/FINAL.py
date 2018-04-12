@@ -56,8 +56,10 @@ class FINAL():
     # the two matrices here will load a numpy matrix for each matrix_processing and edge_attr_processing
     def matrix_processing(self,i,j):
         A1 = nx.adjacency_matrix(self.graphs[i], nodelist = list(self.graphs[i].nodes()))
+        node1 = list(self.graphs[i].nodes())
         A2 = nx.adjacency_matrix(self.graphs[j], nodelist = list(self.graphs[j].nodes()))
-        return A1, A2
+        node2 = list(self.graphs[j].nodes())
+        return A1, A2, node1, node2
     
     def edge_attr_processing(self,i,j):
         N1 = np.loadtxt(self.json[i], dtype = 'float')
@@ -213,4 +215,4 @@ e = set(s1).union(set(t1))
 #print(len(t1))
 #print(len(list(e)))
         
-color = nx.get_edge_attributes(d[0])
+#color = nx.get_edge_attributes(d[0])
