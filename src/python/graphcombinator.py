@@ -1,3 +1,9 @@
+# Author	: Akash.Ganesan
+# Email		: akaberto@umich.edu, akaberto@gmail.com
+# TimeCreated	: Wed Apr 11 23:32:57 2018
+
+"""This module contains graph combinators required for the video analysis"""
+
 import networkx as nx
 import matplotlib.pyplot as plt
 from easydict import EasyDict as edict
@@ -7,89 +13,95 @@ import glob
 import os
 import sys
 
+
+
+# The object_attr is used for annotating objects from the scene graph
 object_attr = {
     "t" : "object",
     "fillcolor" : "red",
     "style" : "filled"}
 
+# The predicate attr is used for annotating predicates from the scene
+# graph
 predicate_attr = {
     "t" : "predicate",
     "fillcolor" : "yellow",
     "style" : "filled"}
 
+# The attribute attr is used for annotating attributes from the scene
+# graph
 attribute_attr = {
     "t" : "attribute",
     "fillcolor" : "green",
     "style" : "filled"}
 
 
+def get_sg_from_json_obj(x):
+    print ("Object got", x)
+    print ("Keys avail", x.keys())
+    return x.results[0].sg
 
-def get_agg_from_json(json_in_folder):
-
+def get_agg_from_json(json_in_folder,  length=None):
+    """ Folder -> [Scene graph]"""
     agg = []
-    print("Length", len(sorted(glob.glob(os.path.join(json_in_folder, "*.json")))))
+
+    cnt = 0
     for i in sorted(glob.glob(os.path.join(json_in_folder, "*.json"))):
         with open(i) as f:
-            try :                
-                x = edict(json.loads(f.read()))            
-                agg = agg + [x.results[0].sg]
-            except:
-                print ("Fired exception")
-                agg = agg + [None]
-                pass
-            
-    return list(agg)
+            x = edict(json.loads(f.read()))            
+            agg = agg + [x]
+
+        if (length != None and cnt >= length):
+            break
         
-    
-def apply_on_sgs(func, json_in_folder):
-    agg = []
-    print("Length", len(sorted(glob.glob(os.path.join(json_in_folder, "*.json")))))
-    for i in sorted(glob.glob(os.path.join(json_in_folder, "*.json"))):
-        with open(i) as f:
-            try :                
-                x = edict(json.loads(f.read()))            
-                agg = agg + (x.results[0].sg)
-            except:
-                print ("Fired exception")
-                agg = agg + None
-                pass
-            
-    return func(list(agg))
-    
-
-def get_aggregate_graph(json_in_folder):
-    return apply_on_sgs(sg_list_to_combined_graph, json_in_folder)
+        cnt = cnt+1
+    return agg
+        
 
 
-def sg_list_to_dg_list(sg_frame):
-    return list(map(sg_to_dg, sg_frame))
 
-def sgs_list_to_dgs_list(sgs_frames):
-    return list(map(sg_list_to_dg_list, sgs_frames))
+def sg_list_to_dg_list(json_frame):
+    """ [JSON]  ->  [Nx.Graph]"""
+    json_frame['sgNx'] = list(map(sg_to_dg, json_frame.results[0].sg))
+    return json_frame
+        
+
+
+def sgs_list_to_dgs_list(json_frames):
+    """ [[JSON]] -> [[Nx.Graph]] """
+    return list(map(sg_list_to_dg_list, json_frames))
 
 def combine_scene_graphs_list(json_in_folder):
-    x = get_agg_from_json(json_in_folder)    
-    return list(map(nx.compose_all,sgs_list_to_dgs_list(x)))
+    """ Folder  -> [JSON + sgNx] ; All the individual frames are combined"""
+    x = get_agg_from_json(json_in_folder)
+    print ("Length of x", len(x))
+    print ("Length of sgs_to_dgs_list", len(sgs_list_to_dgs_list(x)))
+    y = sgs_list_to_dgs_list(x)
+    for i in y:
+        sgNxList = i['sgNx']
+        i['sgNxCombined'] = nx.compose_all(sgNxList) if sgNxList !=[] else []
+    return y
 
 
+def compose_nx_list(nx_list):
+    return nx.compose_all(nx_list) if nx_list !=[] else None
 
-def sg_list_to_frame_graphs(sg_list):
-    dg_list = sg_list_to_dg_list(sg_list)
-    print ("DGList, ",list(dg_list)[0])
-    return nx.compose_all(dg_list)
-
-                
+def get_list_of_sgNx(mod_json):
+    """ Given a list of JSONs with sgNx lists, this will return a list of jsons"""
+    return list([ i['sgNx'] for i in  mod_json])
 
 def sg_list_to_combined_graph(sg_list):
     dg_list = sg_list_to_dg_list(sg_list)
     return nx.compose_all(dg_list)
 
 
-
 def sg_to_dg(sg):
     dg = nx.DiGraph()
 
+
+
     if (sg is not None):
+        
         # Get all objects in an individual scene graph
         # objs = map(lambda (cnt,sg): (cnt,sg.names), enumerate(sg.objects))
         # print ("sg.objects", sg.keys())
