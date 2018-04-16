@@ -100,7 +100,7 @@ def first_fail_index(G,q):
 if __name__=="__main__":
 
 
-    x_a = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video1_out')
+    x_a = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video4_out')
     y_a = sgs_list_to_dgs_list(x_a)
     z_a = get_list_of_sgNx(y_a)
     seq_composed_a = list(map(nx.compose_all,z_a))
@@ -108,13 +108,18 @@ if __name__=="__main__":
     
     
     
-
-    
     x_b = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video3_out')
     y_b = sgs_list_to_dgs_list(x_b)
     z_b = get_list_of_sgNx(y_b)
     seq_composed_b = list(map(nx.compose_all,z_b))
     full_composed_b = nx.compose_all(seq_composed_b)
     
+    
+    
+    x_c = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video1_out')
+    y_c = sgs_list_to_dgs_list(x_c)
+    z_c = get_list_of_sgNx(y_c)
+    seq_composed_c = list(map(nx.compose_all,z_c))
+    full_composed_c = nx.compose_all(seq_composed_c)
     
     
