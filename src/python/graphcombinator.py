@@ -12,7 +12,10 @@ from functools import reduce
 import glob
 import os
 import sys
-
+import numpy as np
+from itertools import chain, combinations
+import networkx as nx
+from networkx.algorithms import isomorphism
 
 
 # The object_attr is used for annotating objects from the scene graph
@@ -144,6 +147,59 @@ def graph_sim_frob(g1,g2):
 
 
 
+
+    
+
+        
+        
+def getMCS(g1,g2):
+    matching_graph=nx.Graph()
+    for n1,n2,attr in g2.edges(data=True):
+        if g1.has_edge(n1,n2) :
+            matching_graph.add_edge(n1,n2,weight=1)
+    graphs = list(nx.connected_component_subgraphs(matching_graph))
+    mcs_length = 0
+    mcs_graph = nx.Graph()
+    for i, graph in enumerate(graphs):
+        if len(graph.nodes()) > mcs_length:
+            mcs_length = len(graph.nodes())
+            mcs_graph = graph
+    return len(mcs_graph.nodes())
+
+def sim_score_mcs(g1,g2):    
+    
+    D = getMCS(g1, g2)
+    res1 = ((D)/ (len(g1.nodes()) + len(g1.nodes()) - D))
+    res = D / min(len(g1.nodes()), len(g2.nodes()))
+    return res1
+
+class Similarity():
+    
+    def __init__(self, G1, G2):
+        self.G1 = G1 
+        self.G2 = G2
+        
+        
+    def getMCS(self):
+       matching_graph=nx.Graph()
+       for n1,n2,attr in self.G2.edges(data=True):
+           if self.G1.has_edge(n1,n2) :
+               matching_graph.add_edge(n1,n2,weight=1)
+       graphs = list(nx.connected_component_subgraphs(matching_graph))
+       mcs_length = 0
+       mcs_graph = nx.Graph()
+       for i, graph in enumerate(graphs):
+           if len(graph.nodes()) > mcs_length:
+               mcs_length = len(graph.nodes())
+               mcs_graph = graph
+       return len(mcs_graph.nodes())
+
+    def sim_score(self):    
+        # a = self.all_subgraphs(self.G2)
+        D = self.getMCS()
+        res1 = ((D)/ (len(self.G1.nodes()) + len(self.G1.nodes()) - D))
+        res = D / min(len(self.G1.nodes()), len(self.G2.nodes()))
+        return res1
 
 
 if __name__=="__main__":
