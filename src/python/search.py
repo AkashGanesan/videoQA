@@ -4,40 +4,43 @@
 
 import graphcombinator
 from graphcombinator import *
-
+import spacy
+import nltk
+from nltk.corpus import wordnet as wn
 import networkx as nx
 import numpy as np
+from nltk.corpus import brown
 
 def get_neighbors(G,q):
     """ Nx.Graph -> seq.Query -> Maybe [Nodes]"""
     if q in G:
-        return list(nx.neighbors(G,q))
+        return list(G.successors(q))
     return None
 
 
-def get_predecessor(G,q):
+def get_predecessors(G,q):
     """ Nx.Graph -> seq.Query -> Maybe [Nodes]"""
     if q in G:
-        return list(nx.predecessor(G,q))
+        return list(G.predecessors(q))
     return None
 
 
 
 def get_suggestions_bk(G,q,depth=1):
     """Nx.Graph -> seq.Query -> Mabye [Nodes] """
-    neighbors = get_predecessor(G,q[0])
+    neighbors = get_predecessors(G,q[0])
 
     if len(q) == 1:
-        return get_predecessor(G,q[0])
+        return get_predecessors(G,q[0])
     
     if neighbors is not None:
         for i in q[1:]:
             if i in neighbors:
-                neighbors = list(nx.predecessor(G,i))
+                neighbors = get_predecessors(G,i)
             else:                
                 return None
 
-        return list(nx.predecessor(G,i))
+        return list(get_predecessors(G,i))
     else:
         return None
 
@@ -61,23 +64,76 @@ def get_suggestions(G,q,depth=1):
         return list(nx.neighbors(G,i))
     else:
         return None
+
+
+
     
 
+def get_all_suggestions(G,q,depth=1):
+    """Nx.Graph -> seq.Query -> Mabye [Nodes] """
+    if depth == 0:
+        return []
+    if search_seq(G,q):
+        sugg_list = []
+        for l,v in G.succ[q[-1]].items():
+            if q[0] in v:
+                sugg_list.append([l] + get_all_suggestions(G,(q+[l]), depth=depth-1))
+        return sugg_list
+    else:
+        return None
 
+
+def word_sym(G,q,depth=1):
+    list1 = 'woman'
+    allsyns1 = set(ss for word in list1 for ss in wordnet.synsets(word))
+    allsyns2 = set(ss for word in list2 for ss in wordnet.synsets(word))
+    best = max((wordnet.wup_similarity(s1, s2) or 0, s1, s2) for s1, s2 in 
+        product(allsyns1, allsyns2))
+    print(best)
+    
+
+def get_suggestions_n(G,q,depth=1):
+    """Nx.Graph -> seq.Query -> Mabye [Nodes] """
+    if search_seq(G,q):
+        sugg_list = []
+        for l,v in G.succ[q[-1]].items():
+            if q[0] in v:
+                sugg_list.append(l)
+        return sugg_list
+    else:
+        return None
+
+
+def reverse_search_seq(G,q):
+    """ This will seach a reverse sequence """
+    return search_seq(G,list(reversed(q)))
+
+
+
+    
+ 
 def search_seq(G,q):
-    """Nx.Graph -> seq.Query -> Bool"""
-    neighbors = get_neighbors(G,q[0])
-    if neighbors is not None:
-        for i in q[1:]:
-            if i in neighbors:
-                neighbors = nx.neighbors(G,i)
-            else:
+    """ This will search a sequence """
+    h = q[0]
+    # Check if the first node is in the graph 
+    ret = h in G
+    if ret == False:
+        return False
+    elif (len(q) > 1):
+        for i,ip1 in zip(q,q[1:]):
+            try : 
+                if (h in G[i][ip1] or
+                    i in G[i][ip1]):
+                    continue
+                else:
+                    return False
+                break
+            except KeyError:
                 return False
         return True
     else:
-        return False
+        return ret
 
-            
     
 def search_bow(G,q):
     """ Nx.Graph -> seq.Query -> Bool """
@@ -93,14 +149,52 @@ def first_fail_index(G,q):
         return x.index(False), q[x.index(False)]
     return None, None
         
+
+
+    
+
+    
+
+class FuzzySearch:
+
+    def __init__(self, graph,model=None):
+        self.nlp = model
+        self.graph = graph
+        self.nodes = sorted(list(graph.nodes))
+        self.nodes_nlp = np.array([self.nlp(node) for node in self.nodes])
+        self.nodes = np.array(self.nodes)
+        self.verbs = {x.name().split('.', 1)[0] for x in wn.all_synsets('v')}
+    
+    def get_similar(self, key, threshold=0.75):    
+        emb_key = self.nlp(key)
+        sim_scores = np.array([emb_key.similarity(i) for i in self.nodes_nlp]) 
+        return self.nodes[sim_scores > threshold]
+
+
+    def get_actions(self, obj):
+        lst = get_suggestions_n(self.graph, obj)
+        val = []
+        for i in lst:
+            if first_word(i) in self.verbs:
+                val.append(i)
+
+        queries = map(lambda x : obj + [x], val)
+        queries_search = map (lambda x : x + get_suggestions_n(self.graph, x), queries)
+        return list(queries_search)
         
 
-        
+    
+    
+def first_word(string):
+    """ Returns the first word"""    
+    return string.split()[0]
+    
+    
 
 if __name__=="__main__":
 
 
-    x_a = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video4_out')
+    x_a = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video1_out')
     y_a = sgs_list_to_dgs_list(x_a)
     z_a = get_list_of_sgNx(y_a)
     seq_composed_a = list(map(nx.compose_all,z_a))
@@ -108,18 +202,47 @@ if __name__=="__main__":
     
     
     
-    x_b = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video3_out')
-    y_b = sgs_list_to_dgs_list(x_b)
-    z_b = get_list_of_sgNx(y_b)
-    seq_composed_b = list(map(nx.compose_all,z_b))
-    full_composed_b = nx.compose_all(seq_composed_b)
+    # x_b = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video2_out')
+    # y_b = sgs_list_to_dgs_list(x_b)
+    # z_b = get_list_of_sgNx(y_b)
+    # seq_composed_b = list(map(nx.compose_all,z_b))
+    # full_composed_b = nx.compose_all(seq_composed_b)
     
     
     
-    x_c = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video1_out')
+    x_c = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video3_out')
     y_c = sgs_list_to_dgs_list(x_c)
     z_c = get_list_of_sgNx(y_c)
     seq_composed_c = list(map(nx.compose_all,z_c))
     full_composed_c = nx.compose_all(seq_composed_c)
+    
+    
+
+
+
+    x_d = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video4_out')
+    y_d = sgs_list_to_dgs_list(x_d)
+    z_d = get_list_of_sgNx(y_d)
+    seq_composed_d = list(map(nx.compose_all,z_d))
+    full_composed_d = nx.compose_all(seq_composed_d)
+    
+    
+    
+
+
+    x_e = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video5_out')
+    y_e = sgs_list_to_dgs_list(x_e)
+    z_e = get_list_of_sgNx(y_e)
+    seq_composed_e = list(map(nx.compose_all,z_e))
+    full_composed_e = nx.compose_all(seq_composed_e)
+
+
+
+    nlp = spacy.load('en_core_web_lg')
+    fuzz_a = FuzzySearch(full_composed_a,nlp)
+    fuzz_c = FuzzySearch(full_composed_c,nlp)
+    fuzz_d = FuzzySearch(full_composed_d,nlp)
+    fuzz_e = FuzzySearch(full_composed_e,nlp)
+    
     
     
