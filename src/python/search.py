@@ -179,39 +179,34 @@ class FuzzySearch:
         return list(queries_search)
         
 
+
+
+    
 def search_a_then_b(graph_frames, a,b):
+    first_a = first_search_seq_temporal(graph_frames, a)
+    first_b = first_search_seq_temporal(graph_frames, b)
+
     ret_val = False
-    found_a = False
-    cntx = None
-    for cnt, graph_frame in enumerate(graph_frames):
-        seq_a_p = search_seq(graph_frame, b)
-        seq_b_p =search_seq(graph_frame, b)
+    if (first_a == None or
+        first_b == None):
+        ret_val = False
 
-        if seq_a_p == False and seq_b_p == False:            
-            continue
-        elif  seq_a_p == False and seq_b_p == True:
-            return False
-        elif seq_a_p == True and seq_b_p == False:
-            found_a = True
-            cnt_x = cnt
-            break            
-        elif seq_a_p == True and seq_b_p == True:
-            return cnt,True
-        
-    if found_a == True:
-        print("Here")
-        for cnt, graph_frame in enumerate(graph_frames[cntx:]):
-            seq_b_p =search_seq(graph_frame, b)
-            if seq_b_p == True:
-                return cnt+cntx, True
-            
-        
-    return ret_val
+    elif (first_b < first_a):
+        ret_val = False
+    else:
+        ret_val =  True
+
+    return ret_val, first_a, first_b
         
             
     
 
-    
+def search_seq_temporal( graph_frames, seq):
+    return [search_seq(i,seq) for i in graph_frames]
+
+def first_search_seq_temporal ( graph_frames, seq):
+    l = search_seq_temporal( graph_frames, seq)
+    return l.index(True) if True in l else None
     
     
 
