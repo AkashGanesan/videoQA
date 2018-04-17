@@ -101,8 +101,6 @@ def sg_list_to_combined_graph(sg_list):
 def sg_to_dg(sg):
     dg = nx.MultiDiGraph()
 
-
-
     if (sg is not None):
         
         # Get all objects in an individual scene graph
@@ -135,8 +133,9 @@ def dotify(g, path):
 
     nx.nx_pydot.write_dot(g, path)
 
-def graph_sim_frob(g1,g2):
-
+def graph_sim_frob(g1D,g2D):
+    g1 = nx.DiGraph(g1D) 
+    g2 = nx.DiGraph(g2D)   
     nodes_a = set(g1.nodes)
     nodes_b = set(g2.nodes)
     nodes_combined = nodes_a.union(nodes_b)
@@ -144,16 +143,10 @@ def graph_sim_frob(g1,g2):
     adj1 = nx.to_numpy_matrix(g1, nodelist = nodes_combined)
     adj2 = nx.to_numpy_matrix(g2, nodelist = nodes_combined)
 
-    return 1 - (
-        (np.linalg.norm(adj1-adj2)**2)/
-        (len(g1.edges)+len(g2.edges)))
+    return 1 - ((np.linalg.norm(adj1-adj2)**2) /
+                (len(g1.edges)+len(g2.edges)))
 
 
-
-
-    
-
-        
         
 def getMCS(g1D,g2D):
     matching_graph=nx.Graph()
