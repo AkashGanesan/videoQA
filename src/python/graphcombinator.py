@@ -16,7 +16,7 @@ import numpy as np
 from itertools import chain, combinations
 import networkx as nx
 from networkx.algorithms import isomorphism
-
+from collections import Counter
 
 # The object_attr is used for annotating objects from the scene graph
 object_attr = {
@@ -99,7 +99,7 @@ def sg_list_to_combined_graph(sg_list):
 
 
 def sg_to_dg(sg):
-    dg = nx.DiGraph()
+    dg = nx.MultiDiGraph()
 
 
 
@@ -109,20 +109,21 @@ def sg_to_dg(sg):
         # objs = map(lambda (cnt,sg): (cnt,sg.names), enumerate(sg.objects))
         # print ("sg.objects", sg.keys())
         objs = dict(list(map(lambda x: (x[0],x[1].names[0])  ,enumerate(sg.objects))))
-        
+
+        main_obj = None
         for rel in sg.relationships:
             dg.add_node(objs[rel['subject']],  **object_attr)
             dg.add_node(rel['predicate'],  **predicate_attr)
             dg.add_node(objs[rel['object']],  **object_attr )
             
             
-            dg.add_edge(objs[rel['subject']], rel['predicate'])
-            dg.add_edge(rel['predicate'], objs[rel['object']])        
-            
+            dg.add_edge(objs[rel['subject']], rel['predicate'], key=objs[rel['subject']])
+            dg.add_edge(rel['predicate'], objs[rel['object']], key=objs[rel['subject']])        
+            main_obj = objs[rel['subject']]
         for rel in sg.attributes:
             dg.add_node(objs[rel['subject']], **object_attr)
             dg.add_node(rel['attribute'], **attribute_attr)        
-            dg.add_edge(objs[rel['subject']], rel['attribute'])
+            dg.add_edge(objs[rel['subject']], rel['attribute'], key=main_obj)
 
         
     return dg
@@ -143,7 +144,9 @@ def graph_sim_frob(g1,g2):
     adj1 = nx.to_numpy_matrix(g1, nodelist = nodes_combined)
     adj2 = nx.to_numpy_matrix(g2, nodelist = nodes_combined)
 
-    return 1- ((np.linalg.norm(adj1-adj2)**2)/(len(g1.edges)+len(g2.edges)))
+    return 1 - (
+        (np.linalg.norm(adj1-adj2)**2)/
+        (len(g1.edges)+len(g2.edges)))
 
 
 
@@ -152,8 +155,10 @@ def graph_sim_frob(g1,g2):
 
         
         
-def getMCS(g1,g2):
+def getMCS(g1D,g2D):
     matching_graph=nx.Graph()
+    g1 = nx.Graph(g1D)
+    g2 = nx.Graph(g2D)
     for n1,n2,attr in g2.edges(data=True):
         if g1.has_edge(n1,n2) :
             matching_graph.add_edge(n1,n2,weight=1)
@@ -170,8 +175,8 @@ def sim_score_mcs(g1,g2):
     
     D = getMCS(g1, g2)
     res1 = ((D)/ (len(g1.nodes()) + len(g1.nodes()) - D))
-    res = D / min(len(g1.nodes()), len(g2.nodes()))
-    return res1
+    res = D / max(len(g1.nodes()), len(g2.nodes()))
+    return res
 
 class Similarity():
     
@@ -226,3 +231,44 @@ if __name__=="__main__":
     
     dotify(nx.compose_all([xG,yG, zG,kG]), "merged.dot")
 
+
+
+
+
+
+def power_law_plot(g, plt_name="Generic video"):
+    plt.rcParams['figure.dpi'] = 150
+    x = g.in_degree
+    y = g.out_degree
+
+    # In[151]:
+    x = dict(x)
+    y = dict(y)
+
+    node_cnt = str(len(g.nodes))
+    edge_cnt = str(len(g.edges))
+    
+    # In[152]:
+    z = { k: x.get(k, 0) + y.get(k, 0) for k in set(x) | set(y)} 
+
+
+    # In[153]:
+    c = Counter(list(z.values()))
+    sorted(c.items())
+    plt.figure()
+    plt.plot(*zip(*sorted(c.items())),'o')
+    plt.loglog()
+    plt.title('Power Law: ' + plt_name)
+    plt.xlabel('Total Degree')
+
+
+    plt.figtext(0.8,
+                0.8,
+                "node_cnt: " + node_cnt + "\n" + "edge_cnt:" + edge_cnt, ha="center",
+                fontsize=7,
+                bbox={"facecolor":"orange", "alpha":0.5, "pad":5})    
+
+    
+    plt.savefig(plt_name)
+    plt.show()
+     
