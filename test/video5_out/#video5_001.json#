@@ -1,0 +1,540 @@
+{
+  "opt": {
+    "output_dir": "",
+    "num_to_draw": 10,
+    "final_nms_thresh": 0.3,
+    "use_cudnn": 1,
+    "text_size": 2,
+    "max_images": 100,
+    "gpu": -1,
+    "splits_json": "info/densecap_splits.json",
+    "vg_img_root_dir": "",
+    "checkpoint": "data/models/densecap/densecap-pretrained-vgg16.t7",
+    "num_proposals": 1000,
+    "rpn_nms_thresh": 0.7,
+    "image_size": 720,
+    "input_image": "/home/akash/learn/598/project/video-context-transcription/test/video5/video5_001.jpg",
+    "input_split": "",
+    "box_width": 2,
+    "input_dir": "",
+    "output_vis_dir": "/home/akash/learn/598/project/video-context-transcription/src/python/default_out_dir",
+    "output_vis": 1
+  },
+  "results": [
+    {
+      "img_name": "video5_001.jpg",
+      "scores": [
+        5.9331059455872,
+        4.5970282554626,
+        3.7639408111572,
+        2.4582185745239,
+        1.7710483074188,
+        1.702098608017,
+        1.0242835283279,
+        0.99202454090118,
+        0.79941833019257,
+        0.70835375785828,
+        0.69187390804291,
+        0.57984244823456,
+        0.57758963108063
+      ],
+      "captions": [
+        "a man sitting at a table",
+        "woman with long black hair",
+        "a glass of beer",
+        "people standing at a table",
+        "man standing in front of a bus",
+        "yellow and black writing",
+        "yellow and black sign",
+        "the word <UNK>",
+        "a yellow and black bag",
+        "man wearing a black shirt",
+        "yellow and black sign",
+        "the shirt is black",
+        "woman with long hair"
+      ],
+      "boxes": [
+        [
+          64.557144165039,
+          9.3565216064453,
+          419.56103515625,
+          399.00463867188
+        ],
+        [
+          312.61883544922,
+          17.284713745117,
+          213.62048339844,
+          282.58081054688
+        ],
+        [
+          58.878486633301,
+          256.72686767578,
+          76.163963317871,
+          143.61773681641
+        ],
+        [
+          230.18550109863,
+          141.92890930176,
+          495.39465332031,
+          261.4921875
+        ],
+        [
+          481.85571289062,
+          119.21528625488,
+          175.01123046875,
+          202.00993347168
+        ],
+        [
+          135.06701660156,
+          350.82958984375,
+          256.09741210938,
+          46.341979980469
+        ],
+        [
+          255.64758300781,
+          347.42205810547,
+          62.391235351562,
+          42.968444824219
+        ],
+        [
+          363.41882324219,
+          342.31106567383,
+          210.68872070312,
+          49.514221191406
+        ],
+        [
+          150.79510498047,
+          222.09658813477,
+          224.00018310547,
+          176.31280517578
+        ],
+        [
+          597.52056884766,
+          146.07434082031,
+          90.923461914062,
+          143.583984375
+        ],
+        [
+          279.64593505859,
+          315.5387878418,
+          77.05078125,
+          76.590698242188
+        ],
+        [
+          427.58062744141,
+          196.62280273438,
+          169.79266357422,
+          197.57873535156
+        ],
+        [
+          355.30755615234,
+          20.862270355225,
+          112.43280029297,
+          124.14691162109
+        ]
+      ],
+      "sg": [
+        {
+          "relationships": [
+            {
+              "predicate": "sit at",
+              "subject": 0,
+              "text": [
+                "man",
+                "sit at",
+                "table"
+              ],
+              "object": 1
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "man"
+              ]
+            },
+            {
+              "names": [
+                "table"
+              ]
+            }
+          ],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [
+            {
+              "predicate": "with",
+              "subject": 0,
+              "text": [
+                "woman",
+                "with",
+                "hair"
+              ],
+              "object": 1
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "woman"
+              ]
+            },
+            {
+              "names": [
+                "hair"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "predicate": "is",
+              "subject": 1,
+              "attribute": "black",
+              "text": [
+                "hair",
+                "is",
+                "black"
+              ],
+              "object": "black"
+            },
+            {
+              "predicate": "is",
+              "subject": 1,
+              "attribute": "long",
+              "text": [
+                "hair",
+                "is",
+                "long"
+              ],
+              "object": "long"
+            }
+          ],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [
+            {
+              "predicate": "of",
+              "subject": 0,
+              "text": [
+                "glass",
+                "of",
+                "beer"
+              ],
+              "object": 1
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "glass"
+              ]
+            },
+            {
+              "names": [
+                "beer"
+              ]
+            }
+          ],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [
+            {
+              "predicate": "stand at",
+              "subject": 0,
+              "text": [
+                "people",
+                "stand at",
+                "table"
+              ],
+              "object": 2
+            },
+            {
+              "predicate": "stand at",
+              "subject": 1,
+              "text": [
+                "people",
+                "stand at",
+                "table"
+              ],
+              "object": 2
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "people"
+              ]
+            },
+            {
+              "names": [
+                "people"
+              ]
+            },
+            {
+              "names": [
+                "table"
+              ]
+            }
+          ],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [
+            {
+              "predicate": "in",
+              "subject": 0,
+              "text": [
+                "man standing",
+                "in",
+                "front"
+              ],
+              "object": 1
+            },
+            {
+              "predicate": "of",
+              "subject": 0,
+              "text": [
+                "man standing",
+                "of",
+                "bus"
+              ],
+              "object": 2
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "man standing"
+              ]
+            },
+            {
+              "names": [
+                "front"
+              ]
+            },
+            {
+              "names": [
+                "bus"
+              ]
+            }
+          ],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [],
+          "phrase": "",
+          "objects": [],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [],
+          "phrase": "",
+          "objects": [],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "word"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "predicate": "is",
+              "subject": 0,
+              "attribute": "<unk>",
+              "text": [
+                "word",
+                "is",
+                "<unk>"
+              ],
+              "object": "<unk>"
+            }
+          ],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "bag"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "predicate": "is",
+              "subject": 0,
+              "attribute": "yellow",
+              "text": [
+                "bag",
+                "is",
+                "yellow"
+              ],
+              "object": "yellow"
+            },
+            {
+              "predicate": "is",
+              "subject": 0,
+              "attribute": "black",
+              "text": [
+                "bag",
+                "is",
+                "black"
+              ],
+              "object": "black"
+            }
+          ],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [
+            {
+              "predicate": "wear",
+              "subject": 0,
+              "text": [
+                "man",
+                "wear",
+                "shirt"
+              ],
+              "object": 1
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "man"
+              ]
+            },
+            {
+              "names": [
+                "shirt"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "predicate": "is",
+              "subject": 1,
+              "attribute": "black",
+              "text": [
+                "shirt",
+                "is",
+                "black"
+              ],
+              "object": "black"
+            }
+          ],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [],
+          "phrase": "",
+          "objects": [],
+          "attributes": [],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "shirt"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "predicate": "is",
+              "subject": 0,
+              "attribute": "black",
+              "text": [
+                "shirt",
+                "is",
+                "black"
+              ],
+              "object": "black"
+            }
+          ],
+          "id": 0,
+          "url": "0"
+        },
+        {
+          "relationships": [
+            {
+              "predicate": "with",
+              "subject": 0,
+              "text": [
+                "woman",
+                "with",
+                "hair"
+              ],
+              "object": 1
+            }
+          ],
+          "phrase": "",
+          "objects": [
+            {
+              "names": [
+                "woman"
+              ]
+            },
+            {
+              "names": [
+                "hair"
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "predicate": "is",
+              "subject": 1,
+              "attribute": "long",
+              "text": [
+                "hair",
+                "is",
+                "long"
+              ],
+              "object": "long"
+            }
+          ],
+          "id": 0,
+          "url": "0"
+        }
+      ]
+    }
+  ]
+}
