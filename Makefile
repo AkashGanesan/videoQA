@@ -5,8 +5,7 @@ init:
 
 setup:
 	module load python-dev/3.5.2	
-	cd video-context-transcription
-	virtualenv -p python3 env
+	virtualenv -p python3 video-context-transcription/env
 	source env/bin/activate
 	pip install --upgrade pip
 	pip install -r requirements
