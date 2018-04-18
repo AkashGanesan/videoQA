@@ -77,8 +77,8 @@ def sgs_list_to_dgs_list(json_frames):
 def combine_scene_graphs_list(json_in_folder):
     """ Folder  -> [JSON + sgNx] ; All the individual frames are combined"""
     x = get_agg_from_json(json_in_folder)
-    print ("Length of x", len(x))
-    print ("Length of sgs_to_dgs_list", len(sgs_list_to_dgs_list(x)))
+    # print ("Length of x", len(x))
+    # print ("Length of sgs_to_dgs_list", len(sgs_list_to_dgs_list(x)))
     y = sgs_list_to_dgs_list(x)
     for i in y:
         sgNxList = i['sgNx']
