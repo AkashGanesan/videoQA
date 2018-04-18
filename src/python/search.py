@@ -26,6 +26,8 @@ def get_predecessors(G,q):
 
 
 
+    
+
 def get_suggestions_bk(G,q,depth=1):
     """Nx.Graph -> seq.Query -> Mabye [Nodes] """
     neighbors = get_predecessors(G,q[0])
@@ -90,8 +92,30 @@ def word_sym(G,q,depth=1):
     best = max((wordnet.wup_similarity(s1, s2) or 0, s1, s2) for s1, s2 in 
         product(allsyns1, allsyns2))
     print(best)
-    
 
+
+def get_active_paths(G, o,i):
+    """ For a given node, get probable paths """
+    l = G[o][i]
+    return list(l)
+
+
+
+def get_suggestions_bk1(G, o, i ):
+    """This takes in two nodes in a list and returns what are the
+    predecessors of this sequence"""
+
+        
+    if search_seq(G,[o,i], False):        
+        active_paths = get_active_paths(G, o, i)
+        sugg_list = []
+        for l,v in G.pred[o].items():
+            if l in active_paths:
+                sugg_list.append(l)
+        return sugg_list
+    else:
+        return None    
+    
 def get_suggestions_n(G,q,depth=1):
     """Nx.Graph -> seq.Query -> Mabye [Nodes] """
     if search_seq(G,q):
@@ -110,10 +134,12 @@ def reverse_search_seq(G,q):
 
 
 
-    
+
+
  
-def search_seq(G,q):
-    """ This will search a sequence """
+def search_seq(G,q,check_key=True):
+    """This will search a sequence; If check_key is True, we only search
+    paths which are annotated properly"""
     h = q[0]
     # Check if the first node is in the graph 
     ret = h in G
@@ -121,13 +147,19 @@ def search_seq(G,q):
         return False
     elif (len(q) > 1):
         for i,ip1 in zip(q,q[1:]):
-            try : 
-                if (h in G[i][ip1] or
-                    i in G[i][ip1]):
-                    continue
+            try :
+                if (check_key):
+                # Highly execution order dependent
+                    if (h in G[i][ip1] or
+                        i in G[i][ip1]):
+                        continue
+                    else:                    
+                        return False
                 else:
-                    return False
-                break
+                    if (G[i][ip1] or G[i][ip1]):
+                        continue
+                    else:
+                        return False                    
             except KeyError:
                 return False
         return True
@@ -152,8 +184,11 @@ def first_fail_index(G,q):
     
 
 class FuzzySearch:
-
+    """This class implements fuzzy similarity metric as well as getting
+    actions of objects in an networkx object"""
     def __init__(self, graph,model=None):
+        """model needs to be supplied.  Else, this is useless.  Uses spacy
+        model"""
         self.nlp = model
         self.graph = graph
         self.nodes = sorted(list(graph.nodes))
@@ -177,14 +212,60 @@ class FuzzySearch:
         queries = map(lambda x : obj + [x], val)
         queries_search = map (lambda x : x + get_suggestions_n(self.graph, x), queries)
         return list(queries_search)
-        
 
 
+
+def search_a_and_b(graph_frames, a,b, check_key_a=True, check_key_b=True):
+    """ Check if a seq occurs before b occurs and return indices if present """
+    first_a = first_search_seq_temporal(graph_frames, a, check_key_a)
+    first_b = first_search_seq_temporal(graph_frames, b, check_key_b)
+
+    ret_val = False
+    if (first_a == None or
+        first_b == None):
+        ret_val = False
+
+    else:
+        for frame in graph_frames[max(first_a, first_b):]:
+            if (search_seq(frame, a, check_key_a) and  search_seq(frame,b, check_key_b)):
+                return True
+        ret_val =  False
+
+    return ret_val
+
+
+def get_relationships(graph, a,b):
+    if a in graph and b in graph:
+        l  = list(nx.all_shortest_paths (graph, a, b))
+        return l
+    else:
+        return None
+
+
+def search_a_then_b(graph_frames, a,b, check_key_a=False, check_key_b=False):
+    """ Check if a seq occurs before b occurs and return indices if present """
+    first_a = first_search_seq_temporal(graph_frames, a, check_key_a)
+    first_b = first_search_seq_temporal(graph_frames, b, check_key_b)
+
+    ret_val = False
+    if (first_a == None or
+        first_b == None):
+        ret_val = False
+
+    elif (first_b < first_a):
+        ret_val = False
+    else:
+        ret_val =  True
+
+    return ret_val, first_a, first_b
+    
 
     
-def search_a_then_b(graph_frames, a,b):
-    first_a = first_search_seq_temporal(graph_frames, a)
-    first_b = first_search_seq_temporal(graph_frames, b)
+    
+def search_a_then_b(graph_frames, a,b, check_key_a=False, check_key_b=False):
+    """ Check if a seq occurs before b occurs and return indices if present """
+    first_a = first_search_seq_temporal(graph_frames, a, check_key_a)
+    first_b = first_search_seq_temporal(graph_frames, b, check_key_b)
 
     ret_val = False
     if (first_a == None or
@@ -199,13 +280,14 @@ def search_a_then_b(graph_frames, a,b):
     return ret_val, first_a, first_b
         
             
-    
 
-def search_seq_temporal( graph_frames, seq):
-    return [search_seq(i,seq) for i in graph_frames]
+def search_seq_temporal( graph_frames, seq, check_key=True):
+    """Check if the sequence is present across all frames and return a
+    list of Bool values"""
+    return [search_seq(i,seq,check_key) for i in graph_frames]
 
-def first_search_seq_temporal ( graph_frames, seq):
-    l = search_seq_temporal( graph_frames, seq)
+def first_search_seq_temporal ( graph_frames, seq, check_key=True):
+    l = search_seq_temporal( graph_frames, seq, check_key=check_key)
     return l.index(True) if True in l else None
     
     
@@ -220,13 +302,7 @@ if __name__=="__main__":
     full_composed_a = nx.compose_all(seq_composed_a)
     
     
-    
-    # x_b = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video2_out')
-    # y_b = sgs_list_to_dgs_list(x_b)
-    # z_b = get_list_of_sgNx(y_b)
-    # seq_composed_b = list(map(nx.compose_all,z_b))
-    # full_composed_b = nx.compose_all(seq_composed_b)
-    
+        
     
     
     x_c = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video3_out')
@@ -262,6 +338,3 @@ if __name__=="__main__":
     fuzz_c = FuzzySearch(full_composed_c,nlp)
     fuzz_d = FuzzySearch(full_composed_d,nlp)
     fuzz_e = FuzzySearch(full_composed_e,nlp)
-    
-    
-    
