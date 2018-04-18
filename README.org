@@ -1,3 +1,46 @@
 * EECS 598 project
 
+
+
+** Getting SceneGraphs.
+   
+   - The scenegraphs are got via a hacked library of CORENLP's
+     scenegraph generator.  This will be in the local copy presented
+     (bin/).  However, due to limitations of git and the lack of
+     clarity on our git repository's library.
+
+** Installation
+
+
+  - Do the following to install all the requisites.  Up to date
+    installation instructions on
+    https://github.com/AkashGanesan/video-context-transcription
+
+    
+  - The below will take a lot of time as we need a lot of resources
+    that comes along with the libraries.  (nltk, networkx, spacy are
+    huge libraries and their dependencies are also very large).
+  #+begin_src shell
+    git clone https://github.com/AkashGanesan/video-context-transcription   
+    cd video-context-transcription    
+    module load python-dev/3.5.2 # Needs Python3
+    virtualenv  -p python3 env
+    source env/bin/activate
+    pip install --upgrade pip
+    pip install networkx nltk numpy pathlib easydict scipy spacy
+    python -m spacy download en_core_web_lg
+    python -m nltk.downloader all
+  #+end_src
+
+
+  - Once the above has been done, we have everything to analyze
+    videos.  You can run python search.py for a demo.
+
+    
+  #+begin_src shell
+    python search.py
+  #+end_src
+
+
+
   
