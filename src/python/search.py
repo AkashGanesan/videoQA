@@ -295,41 +295,41 @@ def first_search_seq_temporal ( graph_frames, seq, check_key=True):
 if __name__=="__main__":
 
 
-    # x_a = graphcombinator.combine_scene_graphs_list('../../test/video1_out')
-    # y_a = sgs_list_to_dgs_list(x_a)
-    # z_a = get_list_of_sgNx(y_a)
-    # seq_composed_a = list(map(nx.compose_all,z_a))
-    # full_composed_a = nx.compose_all(seq_composed_a)
+    x_a = graphcombinator.combine_scene_graphs_list('../../test/video1_out')
+    y_a = sgs_list_to_dgs_list(x_a)
+    z_a = get_list_of_sgNx(y_a)
+    seq_composed_a = list(map(nx.compose_all,z_a))
+    full_composed_a = nx.compose_all(seq_composed_a)
     
-    # x_c = graphcombinator.combine_scene_graphs_list('../../test/video3_out')
-    # y_c = sgs_list_to_dgs_list(x_c)
-    # z_c = get_list_of_sgNx(y_c)
-    # seq_composed_c = list(map(nx.compose_all,z_c))
-    # full_composed_c = nx.compose_all(seq_composed_c)
+    x_c = graphcombinator.combine_scene_graphs_list('../../test/video3_out')
+    y_c = sgs_list_to_dgs_list(x_c)
+    z_c = get_list_of_sgNx(y_c)
+    seq_composed_c = list(map(nx.compose_all,z_c))
+    full_composed_c = nx.compose_all(seq_composed_c)
 
-    # x_d = graphcombinator.combine_scene_graphs_list('../../test/video4_out')
-    # y_d = sgs_list_to_dgs_list(x_d)
-    # z_d = get_list_of_sgNx(y_d)
-    # seq_composed_d = list(map(nx.compose_all,z_d))
-    # full_composed_d = nx.compose_all(seq_composed_d)
+    x_d = graphcombinator.combine_scene_graphs_list('../../test/video4_out')
+    y_d = sgs_list_to_dgs_list(x_d)
+    z_d = get_list_of_sgNx(y_d)
+    seq_composed_d = list(map(nx.compose_all,z_d))
+    full_composed_d = nx.compose_all(seq_composed_d)
     
     
     
 
 
-    # x_e = graphcombinator.combine_scene_graphs_list('../../test/video5_out')
-    # y_e = sgs_list_to_dgs_list(x_e)
-    # z_e = get_list_of_sgNx(y_e)
-    # seq_composed_e = list(map(nx.compose_all,z_e))
-    # full_composed_e = nx.compose_all(seq_composed_e)
+    x_e = graphcombinator.combine_scene_graphs_list('../../test/video5_out')
+    y_e = sgs_list_to_dgs_list(x_e)
+    z_e = get_list_of_sgNx(y_e)
+    seq_composed_e = list(map(nx.compose_all,z_e))
+    full_composed_e = nx.compose_all(seq_composed_e)
 
 
 
-    # nlp = spacy.load('en_core_web_lg')
-    # fuzz_a = FuzzySearch(full_composed_a,nlp)
-    # fuzz_c = FuzzySearch(full_composed_c,nlp)
-    # fuzz_d = FuzzySearch(full_composed_d,nlp)
-    # fuzz_e = FuzzySearch(full_composed_e,nlp)
+    nlp = spacy.load('en_core_web_lg')
+    fuzz_a = FuzzySearch(full_composed_a,nlp)
+    fuzz_c = FuzzySearch(full_composed_c,nlp)
+    fuzz_d = FuzzySearch(full_composed_d,nlp)
+    fuzz_e = FuzzySearch(full_composed_e,nlp)
 
 
 
