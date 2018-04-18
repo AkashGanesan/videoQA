@@ -5,7 +5,7 @@
 """This module contains graph combinators required for the video analysis"""
 
 import networkx as nx
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from easydict import EasyDict as edict
 import json
 from functools import reduce
@@ -229,39 +229,39 @@ if __name__=="__main__":
 
 
 
-def power_law_plot(g, plt_name="Generic video"):
-    plt.rcParams['figure.dpi'] = 150
-    x = g.in_degree
-    y = g.out_degree
+# def power_law_plot(g, plt_name="Generic video"):
+#     plt.rcParams['figure.dpi'] = 150
+#     x = g.in_degree
+#     y = g.out_degree
 
-    # In[151]:
-    x = dict(x)
-    y = dict(y)
+#     # In[151]:
+#     x = dict(x)
+#     y = dict(y)
 
-    node_cnt = str(len(g.nodes))
-    edge_cnt = str(len(g.edges))
+#     node_cnt = str(len(g.nodes))
+#     edge_cnt = str(len(g.edges))
     
-    # In[152]:
-    z = { k: x.get(k, 0) + y.get(k, 0) for k in set(x) | set(y)} 
+#     # In[152]:
+#     z = { k: x.get(k, 0) + y.get(k, 0) for k in set(x) | set(y)} 
 
 
-    # In[153]:
-    c = Counter(list(z.values()))
-    sorted(c.items())
-    plt.figure()
-    plt.plot(*zip(*sorted(c.items())),'o')
-    plt.loglog()
-    plt.title('Power Law: ' + plt_name)
-    plt.xlabel('Total Degree')
+#     # In[153]:
+#     c = Counter(list(z.values()))
+#     sorted(c.items())
+#     plt.figure()
+#     plt.plot(*zip(*sorted(c.items())),'o')
+#     plt.loglog()
+#     plt.title('Power Law: ' + plt_name)
+#     plt.xlabel('Total Degree')
 
 
-    plt.figtext(0.8,
-                0.8,
-                "node_cnt: " + node_cnt + "\n" + "edge_cnt:" + edge_cnt, ha="center",
-                fontsize=7,
-                bbox={"facecolor":"orange", "alpha":0.5, "pad":5})    
+#     plt.figtext(0.8,
+#                 0.8,
+#                 "node_cnt: " + node_cnt + "\n" + "edge_cnt:" + edge_cnt, ha="center",
+#                 fontsize=7,
+#                 bbox={"facecolor":"orange", "alpha":0.5, "pad":5})    
 
     
-    plt.savefig(plt_name)
-    plt.show()
+#     plt.savefig(plt_name)
+#     plt.show()
      
