@@ -295,46 +295,127 @@ def first_search_seq_temporal ( graph_frames, seq, check_key=True):
 if __name__=="__main__":
 
 
-    x_a = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video1_out')
-    y_a = sgs_list_to_dgs_list(x_a)
-    z_a = get_list_of_sgNx(y_a)
-    seq_composed_a = list(map(nx.compose_all,z_a))
-    full_composed_a = nx.compose_all(seq_composed_a)
+    # x_a = graphcombinator.combine_scene_graphs_list('../../test/video1_out')
+    # y_a = sgs_list_to_dgs_list(x_a)
+    # z_a = get_list_of_sgNx(y_a)
+    # seq_composed_a = list(map(nx.compose_all,z_a))
+    # full_composed_a = nx.compose_all(seq_composed_a)
     
-    
-        
-    
-    
-    x_c = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video3_out')
-    y_c = sgs_list_to_dgs_list(x_c)
-    z_c = get_list_of_sgNx(y_c)
-    seq_composed_c = list(map(nx.compose_all,z_c))
-    full_composed_c = nx.compose_all(seq_composed_c)
-    
-    
+    # x_c = graphcombinator.combine_scene_graphs_list('../../test/video3_out')
+    # y_c = sgs_list_to_dgs_list(x_c)
+    # z_c = get_list_of_sgNx(y_c)
+    # seq_composed_c = list(map(nx.compose_all,z_c))
+    # full_composed_c = nx.compose_all(seq_composed_c)
 
-
-
-    x_d = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video4_out')
-    y_d = sgs_list_to_dgs_list(x_d)
-    z_d = get_list_of_sgNx(y_d)
-    seq_composed_d = list(map(nx.compose_all,z_d))
-    full_composed_d = nx.compose_all(seq_composed_d)
+    # x_d = graphcombinator.combine_scene_graphs_list('../../test/video4_out')
+    # y_d = sgs_list_to_dgs_list(x_d)
+    # z_d = get_list_of_sgNx(y_d)
+    # seq_composed_d = list(map(nx.compose_all,z_d))
+    # full_composed_d = nx.compose_all(seq_composed_d)
     
     
     
 
 
-    x_e = graphcombinator.combine_scene_graphs_list('/home/akash/learn/598/project/video-context-transcription/test/video5_out')
-    y_e = sgs_list_to_dgs_list(x_e)
-    z_e = get_list_of_sgNx(y_e)
-    seq_composed_e = list(map(nx.compose_all,z_e))
-    full_composed_e = nx.compose_all(seq_composed_e)
+    # x_e = graphcombinator.combine_scene_graphs_list('../../test/video5_out')
+    # y_e = sgs_list_to_dgs_list(x_e)
+    # z_e = get_list_of_sgNx(y_e)
+    # seq_composed_e = list(map(nx.compose_all,z_e))
+    # full_composed_e = nx.compose_all(seq_composed_e)
 
 
 
-    nlp = spacy.load('en_core_web_lg')
-    fuzz_a = FuzzySearch(full_composed_a,nlp)
-    fuzz_c = FuzzySearch(full_composed_c,nlp)
-    fuzz_d = FuzzySearch(full_composed_d,nlp)
-    fuzz_e = FuzzySearch(full_composed_e,nlp)
+    # nlp = spacy.load('en_core_web_lg')
+    # fuzz_a = FuzzySearch(full_composed_a,nlp)
+    # fuzz_c = FuzzySearch(full_composed_c,nlp)
+    # fuzz_d = FuzzySearch(full_composed_d,nlp)
+    # fuzz_e = FuzzySearch(full_composed_e,nlp)
+
+
+
+    print ("\nVideo 1 Questions")
+    print ("\nWhat is the woman wearing")
+    print (get_suggestions_n(full_composed_a, ['woman', 'wear']))
+
+    print ("\nWhat is the man wearing?")
+    print (get_suggestions_n(full_composed_a, ['man', 'wear']))
+
+    print ("\nWhat is the woman doing?")
+    print (fuzz_a.get_actions(['woman']))
+
+    print ("\nWhat is the color of the woman's hair?")
+    # Here, we need to combine these.  However, we can automate this
+    # by using the get_relationships function
+
+    # This will give suggestions that are connected to woman and hair.
+    x = get_suggestions_n(full_composed_a, (get_relationships(full_composed_a,'woman','hair')[0]))
+    y = [nlp('color').similarity(nlp(i)) for i in x] # This will give scores that can be used for getting values
+    z = []
+    for k,v in zip(x,y):
+        if v > 0.5:
+            z.append(k)
+    print (z)
+    
+    # Alternative way to get the actions.
+    # get_suggestions_n(full_composed_a, (get_relationships(full_composed_a,'woman','hair')[0])
+    # print (fuzz_a.get_actions(['woman','have','hair'])[-1])
+
+
+    print ("\n Is the woman wearing a necklace and then wearing a hat?")
+    print (search_a_then_b(seq_composed_a, ['woman','wear', 'necklace'], ['woman','wear', 'hat']))
+    
+
+    print ("\nVideo 3 Questions")
+    print ("\nIs the man wearing a jacket?")
+    print (get_relationships(full_composed_c,'man', 'jacket') is not None)
+
+    print ("\nWhat is the man wearing?")
+    print (get_suggestions_n(full_composed_c, ['man', 'wear']))
+
+    print ("\nWhat is the woman doing?")
+    # Here, the first is the subject in question and the second is the
+    # action followed by all the items that are associated with this sequence
+    print (fuzz_c.get_actions(['woman']))
+
+    print ("\nWhat is the man cutting?")
+    print(get_suggestions_n(full_composed_c,['man', 'cut']))
+    
+
+    print ("\nVideo 4 Questions")
+    print ("\nIs the man wearing a skirt?")
+    print (get_relationships(full_composed_d,'man', 'skirt') is not None)
+
+    print ("\nWhat is the man wearing?")
+    print (get_suggestions_n(full_composed_d, ['man', 'wear']))
+
+    print ("\nWhat is the woman doing?")
+    # Here, the first is the subject in question and the second is the
+    # action followed by all the items that are associated with this sequence
+    print (fuzz_d.get_actions(['woman']))
+
+    print ("\nWhat is the man eating?")
+    print (get_suggestions_n(full_composed_d,['man', 'eat']))
+    
+    
+    print ("\nWhat is on the table? (Get top 10 nodes)")
+    print (get_suggestions_bk1(full_composed_d, 'on', 'table')[:10])
+
+
+    print ("\nVideo 5 Questions")
+    print ("\nIs the woman smiling?")
+    # If this is not empty
+    print (get_relationships(full_composed_e, 'woman', 'smile')[0] != [])
+
+    print ("\nWhat is the man wearing?")
+    print (get_suggestions_n(full_composed_e, ['man', 'wear']))
+
+    print ("\nWhat is the woman doing?")
+    # Here, the first is the subject in question and the second is the
+    # action followed by all the items that are associated with this sequence
+    print (fuzz_e.get_actions(['woman']))
+
+    print ("\nWhat is the man eating?")
+    print (get_suggestions_n(full_composed_e,['man', 'eat']))
+    
+    print ("Is the man holding a knife and cooking?")
+    print (search_a_and_b(seq_composed_e, ['man','hold', 'knife'], ['man','cook in'], False, False))
