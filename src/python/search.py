@@ -24,10 +24,6 @@ def get_predecessors(G,q):
         return list(G.predecessors(q))
     return None
 
-
-
-    
-
 def get_suggestions_bk(G,q,depth=1):
     """Nx.Graph -> seq.Query -> Mabye [Nodes] """
     neighbors = get_predecessors(G,q[0])
@@ -45,9 +41,6 @@ def get_suggestions_bk(G,q,depth=1):
         return list(get_predecessors(G,i))
     else:
         return None
-
-
-
 
 def get_suggestions(G,q,depth=1):
     """Nx.Graph -> seq.Query -> Mabye [Nodes] """
@@ -67,10 +60,6 @@ def get_suggestions(G,q,depth=1):
     else:
         return None
 
-
-
-    
-
 def get_all_suggestions(G,q,depth=1):
     """Nx.Graph -> seq.Query -> Mabye [Nodes] """
     if depth == 0:
@@ -84,7 +73,7 @@ def get_all_suggestions(G,q,depth=1):
     else:
         return None
 
-
+# Unused    
 def word_sym(G,q,depth=1):
     list1 = 'woman'
     allsyns1 = set(ss for word in list1 for ss in wordnet.synsets(word))
@@ -98,8 +87,6 @@ def get_active_paths(G, o,i):
     """ For a given node, get probable paths """
     l = G[o][i]
     return list(l)
-
-
 
 def get_suggestions_bk1(G, o, i ):
     """This takes in two nodes in a list and returns what are the
@@ -128,15 +115,11 @@ def get_suggestions_n(G,q,depth=1):
         return None
 
 
+# Unused    
 def reverse_search_seq(G,q):
     """ This will seach a reverse sequence """
     return search_seq(G,list(reversed(q)))
 
-
-
-
-
- 
 def search_seq(G,q,check_key=True):
     """This will search a sequence; If check_key is True, we only search
     paths which are annotated properly"""
@@ -166,23 +149,21 @@ def search_seq(G,q,check_key=True):
     else:
         return ret
 
-    
+
+# Unused    
 def search_bow(G,q):
     """ Nx.Graph -> seq.Query -> Bool """
     types_list = nx.get_node_attributes(G,'t')
     return all(map (lambda x: x in G, q))
 
-
-
+# Unused
 def first_fail_index(G,q):
     """ Nx.Graph -> seq.Query -> Index """
     x =  list(map (lambda x: x in G, q))
     if all(x) is False:
         return x.index(False), q[x.index(False)]
     return None, None
-        
-    
-
+            
 class FuzzySearch:
     """This class implements fuzzy similarity metric as well as getting
     actions of objects in an networkx object"""
@@ -213,8 +194,6 @@ class FuzzySearch:
         queries_search = map (lambda x : x + get_suggestions_n(self.graph, x), queries)
         return list(queries_search)
 
-
-
 def search_a_and_b(graph_frames, a,b, check_key_a=True, check_key_b=True):
     """ Check if a seq occurs before b occurs and return indices if present """
     first_a = first_search_seq_temporal(graph_frames, a, check_key_a)
@@ -233,7 +212,6 @@ def search_a_and_b(graph_frames, a,b, check_key_a=True, check_key_b=True):
 
     return ret_val
 
-
 def get_relationships(graph, a,b):
     if a in graph and b in graph:
         l  = list(nx.all_shortest_paths (graph, a, b))
@@ -241,27 +219,6 @@ def get_relationships(graph, a,b):
     else:
         return None
 
-
-def search_a_then_b(graph_frames, a,b, check_key_a=False, check_key_b=False):
-    """ Check if a seq occurs before b occurs and return indices if present """
-    first_a = first_search_seq_temporal(graph_frames, a, check_key_a)
-    first_b = first_search_seq_temporal(graph_frames, b, check_key_b)
-
-    ret_val = False
-    if (first_a == None or
-        first_b == None):
-        ret_val = False
-
-    elif (first_b < first_a):
-        ret_val = False
-    else:
-        ret_val =  True
-
-    return ret_val, first_a, first_b
-    
-
-    
-    
 def search_a_then_b(graph_frames, a,b, check_key_a=False, check_key_b=False):
     """ Check if a seq occurs before b occurs and return indices if present """
     first_a = first_search_seq_temporal(graph_frames, a, check_key_a)
@@ -280,7 +237,6 @@ def search_a_then_b(graph_frames, a,b, check_key_a=False, check_key_b=False):
     return ret_val, first_a, first_b
         
             
-
 def search_seq_temporal( graph_frames, seq, check_key=True):
     """Check if the sequence is present across all frames and return a
     list of Bool values"""
@@ -291,7 +247,6 @@ def first_search_seq_temporal ( graph_frames, seq, check_key=True):
     return l.index(True) if True in l else None
     
     
-
 if __name__=="__main__":
 
 
@@ -312,10 +267,6 @@ if __name__=="__main__":
     z_d = get_list_of_sgNx(y_d)
     seq_composed_d = list(map(nx.compose_all,z_d))
     full_composed_d = nx.compose_all(seq_composed_d)
-    
-    
-    
-
 
     x_e = graphcombinator.combine_scene_graphs_list('../../test/video5_out')
     y_e = sgs_list_to_dgs_list(x_e)
@@ -323,15 +274,11 @@ if __name__=="__main__":
     seq_composed_e = list(map(nx.compose_all,z_e))
     full_composed_e = nx.compose_all(seq_composed_e)
 
-
-
     nlp = spacy.load('en_core_web_lg')
     fuzz_a = FuzzySearch(full_composed_a,nlp)
     fuzz_c = FuzzySearch(full_composed_c,nlp)
     fuzz_d = FuzzySearch(full_composed_d,nlp)
     fuzz_e = FuzzySearch(full_composed_e,nlp)
-
-
 
     print ("\nVideo 1 Questions")
     print ("\nWhat is the woman wearing")
