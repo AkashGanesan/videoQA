@@ -73,16 +73,6 @@ def get_all_suggestions(G,q,depth=1):
     else:
         return None
 
-# Unused    
-def word_sym(G,q,depth=1):
-    list1 = 'woman'
-    allsyns1 = set(ss for word in list1 for ss in wordnet.synsets(word))
-    allsyns2 = set(ss for word in list2 for ss in wordnet.synsets(word))
-    best = max((wordnet.wup_similarity(s1, s2) or 0, s1, s2) for s1, s2 in 
-        product(allsyns1, allsyns2))
-    print(best)
-
-
 def get_active_paths(G, o,i):
     """ For a given node, get probable paths """
     l = G[o][i]
@@ -115,11 +105,6 @@ def get_suggestions_n(G,q,depth=1):
         return None
 
 
-# Unused    
-def reverse_search_seq(G,q):
-    """ This will seach a reverse sequence """
-    return search_seq(G,list(reversed(q)))
-
 def search_seq(G,q,check_key=True):
     """This will search a sequence; If check_key is True, we only search
     paths which are annotated properly"""
@@ -150,19 +135,7 @@ def search_seq(G,q,check_key=True):
         return ret
 
 
-# Unused    
-def search_bow(G,q):
-    """ Nx.Graph -> seq.Query -> Bool """
-    types_list = nx.get_node_attributes(G,'t')
-    return all(map (lambda x: x in G, q))
 
-# Unused
-def first_fail_index(G,q):
-    """ Nx.Graph -> seq.Query -> Index """
-    x =  list(map (lambda x: x in G, q))
-    if all(x) is False:
-        return x.index(False), q[x.index(False)]
-    return None, None
             
 class FuzzySearch:
     """This class implements fuzzy similarity metric as well as getting
